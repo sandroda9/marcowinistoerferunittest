@@ -4,14 +4,17 @@ public class User {
 	private int id;
 	private String name;
 	private String email;
+	
 	private String password;
 	private boolean isLogged;
 	
-		
 	public User(String name2, String email2, String password2) {
 		// TODO Auto-generated constructor stub
+		this.name = name2;
+		this.email = email2;
+		this.password = password2;
+		this.isLogged = false;
 	}
-	
 	public String getEmail() {
 		return email;
 	}
@@ -42,18 +45,11 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public void setToken(Object object) {
-		// TODO Auto-generated method stub
-		
+	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", isLogged="
+				+ isLogged + "]";
 	}
-
-	public Object getToken() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
-	
 
 }

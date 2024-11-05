@@ -22,6 +22,8 @@ public class UserService {
 				user = new User(name,email,password);
 				int id = dao.save(user);
 				user.setId(id);
+			} else {
+				return null;
 			}
 		}
 		return user;
@@ -54,9 +56,9 @@ public class UserService {
 
     
 
-    boolean deleteUSer(int id) {
+    public boolean deleteUser(int id) {
     	return dao.deleteById(id);
     }
     
-    //comment
+   
 }

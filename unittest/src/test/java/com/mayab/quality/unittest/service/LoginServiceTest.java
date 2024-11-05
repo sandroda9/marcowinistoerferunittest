@@ -1,7 +1,7 @@
-package com.mayab.quality.loginunittest.service;
+package com.mayab.quality.unittest.service;
 import com.mayab.quality.loginunittest.dao.IDAOUser;
 import com.mayab.quality.loginunittest.model.User;
-
+import com.mayab.quality.loginunittest.service.LoginService;
 
 //import mockito
 import org.mockito.Mockito;

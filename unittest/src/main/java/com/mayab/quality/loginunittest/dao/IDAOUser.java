@@ -19,5 +19,4 @@ public interface IDAOUser {
 
 	User updateUser(User userOld);
 	
-
 }
