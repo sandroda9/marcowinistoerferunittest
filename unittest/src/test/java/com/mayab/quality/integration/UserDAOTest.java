@@ -2,6 +2,8 @@ package com.mayab.quality.integration;
 
 import java.io.File;
 import java.io.FileInputStream;
+
+import org.apache.xmlbeans.impl.xb.xsdschema.ListDocument.List;
 import org.dbunit.Assertion;
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
@@ -20,7 +22,6 @@ import com.mayab.quality.loginunittest.model.User;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
 
 
 class UserDAOTest extends DBTestCase {
@@ -53,38 +54,18 @@ class UserDAOTest extends DBTestCase {
         return new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/initDB.xml"));
     }
 
-    @Test
-    public void testAgregarUsuario() {
-        User usuario = new User("username2", "correo2@correo.com", "123456");
-        daoMySql.save(usuario);
-
-        try {
-            IDatabaseConnection conn = getConnection();
-            conn.getConfig().setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, true);
-            IDataSet databaseDataSet = conn.createDataSet();
-            ITable actualTable = databaseDataSet.getTable("usuarios");
-            //read xml with expected result
-            IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/create.xml"));
-            ITable expectedTable = expectedDataSet.getTable("usuarios");
-
-
-            Assertion.assertEquals(expectedTable, actualTable);
-        } catch (Exception e) {
-            fail("Error in insert test: " + e.getMessage());
-        }
-    }
-    
+       
     @Test
     public void testAddUser() {
         // Initialize a new User object
-        User usuario = new User("username2", "correo2@correo.com", "123456");
-        
-        // Save the user and retrieve the new ID if necessary
+        User usuario = new User("username1", "correo1@correo.com", "123456");
+            
+        // Save the user and retrieve the new ID
         int newID = daoMySql.save(usuario);
 
-     // Verify data in database
+        // Verify data in database
         try {
-            // This is the full database
+            
             IDatabaseConnection conn = getConnection(); // Connection
             IDataSet databaseDataSet = conn.createDataSet(); // DB
 
@@ -109,5 +90,59 @@ class UserDAOTest extends DBTestCase {
         }
 
     }
+    
+    @Test
+    public void testFindByUserName() {
+        // Predefined user name
+        String name = "username1";
+
+        // Retrieve user from the database using the method to test
+        User foundUser = daoMySql.findByUserName(name);
+
+        // Verify data in the database
+        try {
+            IDatabaseConnection conn = getConnection();
+            QueryDataSet actualTable = new QueryDataSet(conn);
+            actualTable.addTable("userTMP", "SELECT * FROM usuarios WHERE name = '" + name + "'");
+
+            String actualName = (String) actualTable.getTable("userTMP").getValue(0, "name");
+
+            assertThat(actualName, is(foundUser.getName()));
+
+        } catch (Exception e) {
+            fail("Error in findByUserName test: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFindUserByEmail() {
+        // Predefined email
+        String email = "correo1@correo.com";
+
+        // Retrieve user from the database using the method to test
+        User foundUser = daoMySql.findUserByEmail(email);
+
+        // Verify data in the database
+        try {
+            IDatabaseConnection conn = getConnection();
+            QueryDataSet actualTable = new QueryDataSet(conn);
+            actualTable.addTable("emailTMP", "SELECT * FROM usuarios WHERE email = '" + email + "'");
+
+            String actualEmail = (String) actualTable.getTable("emailTMP").getValue(0, "email");
+
+            assertThat(actualEmail, is(foundUser.getEmail()));
+
+        } catch (Exception e) {
+            fail("Error in findUserByEmail test: " + e.getMessage());
+        }
+    }
+
+    
+
+
+    
+    
+    
+    
 
 }

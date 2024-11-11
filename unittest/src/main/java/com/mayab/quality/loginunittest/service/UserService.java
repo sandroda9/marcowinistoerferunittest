@@ -14,20 +14,21 @@ public class UserService {
 	}
 	
 	public User createUser(String name, String email, String password) {
-		User user = null;
-		if (password.length() >= 8 && password.length() <=16) {
-			user = dao.findUserByEmail(email);
-			
-			if (user == null) {
-				user = new User(name,email,password);
-				int id = dao.save(user);
-				user.setId(id);
-			} else {
-				return null;
-			}
-		}
-		return user;
+	    User user = null;
+	    if (password.length() >= 8 && password.length() <= 16) {
+	        user = dao.findUserByEmail(email);
+	        
+	        if (user == null) {
+	            user = new User(name, email, password);
+	            int id = dao.save(user);
+	            if (id > 0) user.setId(id);
+	        } else {
+	            return null;
+	        }
+	    }
+	    return user;
 	}
+
 	
 	public List<User> findAllUsers(){
 		List<User> users = new ArrayList<User>();
