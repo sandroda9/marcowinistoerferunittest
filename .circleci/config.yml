@@ -2,30 +2,36 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/circleci-java
+    working_directory: ~/unittest
     docker:
       - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
+          name: Print Current Directory
+          command: pwd
+      - run:
+          name: List Files in Directory
+          command: ls -al
+      - run:
           name: Build Project
           command: mvn install -DskipTests
 
   unit_test:
-    working_directory: ~/circleci-java
+    working_directory: ~/unittest
     docker:
-      - image: "circleci/openjdk:17"
+      - image: openjdk:17-slim
     steps:
       - checkout
       - run:
           name: Run Unit Tests (UserServiceTest)
-          command: mvn test -Dtest=UserServiceTest
+          command: mvn test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
-    working_directory: ~/circleci-java
+    working_directory: ~/unittest
     docker:
-      - image: "circleci/openjdk:17"
-      - image: "circleci/mysql:8.0"
+      - image: cimg/openjdk:11.0
+      - image: circleci/mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: calidad2024
@@ -43,27 +49,18 @@ jobs:
             done
       - run:
           name: Run Integration Tests (UserServiceTest)
-          command: mvn failsafe:integration-test -Dit.test=UserServiceTest
+          command: mvn failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
 
   selenium_test:
-    working_directory: ~/circleci-java
+    working_directory: ~/unittest
     docker:
-      - image: "circleci/openjdk:17"
+      - image: openjdk:17-slim
       - image: selenium/standalone-chrome:latest
     steps:
       - checkout
       - run:
           name: Run Selenium Functional Tests (CRUD)
-          command: mvn verify -P selenium -Dtest=CRUDTest
-
-  deployment:
-    working_directory: ~/circleci-java
-    docker:
-      - image: "circleci/openjdk:17"
-    steps:
-      - run:
-          name: Deployment Placeholder
-          command: echo "Deployment done!"
+          command: mvn verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
@@ -78,10 +75,3 @@ workflows:
       - selenium_test:
           requires:
             - integration_test
-      - deployment:
-          requires:
-            - selenium_test
-          filters:
-            branches:
-              only:
-                - master
