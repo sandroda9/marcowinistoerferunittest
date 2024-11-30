@@ -1,0 +1,75 @@
+version: 2.1
+
+jobs:
+  build:
+    working_directory: ~/project
+    docker:
+      - image: cimg/openjdk:17.0  # Ensure Java 17 compatibility
+    steps:
+      - checkout
+      # Use mvn clean and package as the standard maven build phase
+      - run:
+          name: Build
+          command: mvn -B -DskipTests clean package
+
+  unit_test:
+    working_directory: ~/project
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - checkout
+      - run:
+          name: Run Unit Tests
+          command: mvn -f ~/project/unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+
+  integration_test:
+    working_directory: ~/project
+    docker:
+      - image: cimg/openjdk:17.0
+      - image: circleci/mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: calidad2024
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    steps:
+      - checkout
+      - run:
+          name: Wait for MySQL to Start
+          command: |
+            for i in $(seq 1 30); do
+              nc -z localhost 3306 && echo "MySQL is up!" && break
+              echo "Waiting for MySQL..."
+              sleep 1
+            done
+            if ! nc -z localhost 3306; then
+              echo "MySQL failed to start." && exit 1
+            fi
+      - run:
+          name: Run Integration Tests
+          command: mvn -f ~/project/unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
+
+  selenium_test:
+    working_directory: ~/project
+    docker:
+      - image: cimg/openjdk:17.0
+      - image: selenium/standalone-chrome:latest
+    steps:
+      - checkout
+      - run:
+          name: Run Selenium Functional Tests
+          command: mvn -f ~/project/unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - unit_test:
+          requires:
+            - build
+      - integration_test:
+          requires:
+            - unit_test
+      - selenium_test:
+          requires:
+            - integration_test
