@@ -11,21 +11,24 @@ jobs:
           name: Print Current Directory
           command: pwd
       - run:
-          name: List Files in Directory
-          command: ls -al
+          name: List All Files and Directories
+          command: ls -R
       - run:
           name: Build Project
-          command: mvn install -DskipTests
+          command: mvn -f ~/project/unittest/pom.xml install -DskipTests
 
   unit_test:
-    working_directory: ~/unittest
+    working_directory: ~/project/unittest
     docker:
-      - image: openjdk:17-slim
+      - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
-          name: Run Unit Tests (UserServiceTest)
-          command: mvn test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+          name: Print Current Directory
+          command: pwd
+      - run:
+          name: Run Unit Tests
+          command: mvn -f ~/project/unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
     working_directory: ~/project/unittest
@@ -48,19 +51,19 @@ jobs:
               sleep 1
             done
       - run:
-          name: Run Integration Tests (UserServiceTest)
-          command: mvn failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
+          name: Run Integration Tests
+          command: mvn -f ~/project/unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
 
   selenium_test:
     working_directory: ~/project/unittest
     docker:
-      - image: openjdk:17-slim
+      - image: cimg/openjdk:11.0
       - image: selenium/standalone-chrome:latest
     steps:
       - checkout
       - run:
-          name: Run Selenium Functional Tests (CRUD)
-          command: mvn verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+          name: Run Selenium Functional Tests
+          command: mvn -f ~/project/unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
