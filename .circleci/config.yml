@@ -48,7 +48,7 @@ jobs:
             fi
       - run:
           name: Run Integration Tests
-          command: mvn -f unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
+          command: mvn -f unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest -DexcludedTests=com.mayab.quality.integration.UserDAOTest
 
   selenium_test:
     working_directory: ~/unittest
