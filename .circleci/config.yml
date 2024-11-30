@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: home/unittest
+    working_directory: ~/unittest
     docker:
       - image: cimg/openjdk:17.0  # Ensure Java 17 compatibility
     steps:
@@ -10,7 +10,8 @@ jobs:
       # Use mvn clean and package as the standard maven build phase
       - run:
           name: Build
-          command: mvn -B -DskipTests clean package
+          command: mvn -f unittest/pom.xml clean package
+
 
   unit_test:
     working_directory: ~/unittest
