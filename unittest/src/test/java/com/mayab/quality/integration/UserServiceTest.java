@@ -207,7 +207,7 @@ class UserServiceTest extends DBTestCase{
 		User user = service.createUser("UserById", "userbyid@example.com", "pass1233");
 	    
 	    
-	    // Check if user creation succeeded and ID is set
+	    // Check if user creation succeeded
 	    assertNotNull(user);
 	    int userId = user.getId();
 	    assertNotNull(userId);

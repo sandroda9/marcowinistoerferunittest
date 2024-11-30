@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import static org.junit.Assert.*;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,11 +16,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.apache.commons.io.FileUtils;
 import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 
-public class FacebookTest {
-  private static WebDriver driver;
+public class SeleniumTest2 {
+  private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
@@ -27,56 +28,27 @@ public class FacebookTest {
   public void setUp() throws Exception {
     WebDriverManager.chromedriver().setup();
     driver = new ChromeDriver();
-    baseUrl = "https://www.facebook.com/";
+    baseUrl = "https://www.google.com/";
     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
     js = (JavascriptExecutor) driver;
 
   }
 
-  
-  	//Function to Take Screenshot
-	public static void TakeScreenshot(String fileName)throws IOException {
-	   // Creating an instance of File
-	   File file = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-	
-	   // Copy the screenshot to the desired location
-	   FileUtils.copyFile(file, new File("src/screenshots/" + fileName + ".jpeg"));
-	}
-	
-	
   @Test
-  public void testLogin_wrongCredentials() {
-    driver.get("https://www.facebook.com/");
+  public void testUntitledTestCase() throws Exception {
+	pause(5000);
+    driver.get(baseUrl + "chrome://newtab/");
     pause(5000);
-    driver.findElement(By.id("email")).clear();
-    driver.findElement(By.id("email")).sendKeys("puppies");    
-    driver.findElement(By.id("pass")).clear();
-    driver.findElement(By.id("pass")).sendKeys("puppies"); 
-    driver.findElement(By.name("login")).click();
-         
+    driver.get("https://www.google.ch/");
+    pause(5000);
+    driver.get("https://en.wikipedia.org/wiki/Puppy");
+    pause(5000);
     
-    String actualResult = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div[1]/div/div[2]/div[2]/form/div/div[1]/div[2]")).getText();
-   
-    assertTrue(actualResult.contains("The email or mobile number you entered isn’t connected to an account"));
-      
+    WebElement actualResult = driver.findElement(By.xpath("/html/body/div[2]/div/div[3]/main/div[3]/div[1]/div[2]"));
+    assertThat(actualResult,is("From Wikipedia, the free encyclopedia"));
     
-    try {
-		TakeScreenshot("homepage_screenshot");
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		System.out.println("screenshot");
-		
-		e.printStackTrace();
-		
-		
-	}
-    
-    driver.quit();
-
+  //  assertTrue(driver.findElement(By.cssSelector("BODY")).getText().matches("^[\\s\\S]*From Wikipedia, the free encyclopedia[\\s\\S]*$"));
   }
-  
-	
-
   
   private void pause(long mils) {
 	  try {
@@ -89,7 +61,7 @@ public class FacebookTest {
 
   @After
   public void tearDown() throws Exception {
-    //driver.quit();
+    driver.quit();
     String verificationErrorString = verificationErrors.toString();
     if (!"".equals(verificationErrorString)) {
       fail(verificationErrorString);
