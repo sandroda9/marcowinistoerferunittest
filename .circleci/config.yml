@@ -18,8 +18,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run Unit Tests
-          command: mvn -f unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+          name: Unit Tests
+          command: mvn -f unittest/pom.xml -Dit.test=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
     working_directory: ~/unittest
@@ -57,7 +57,7 @@ jobs:
       - checkout
       - run:
           name: Run Selenium Functional Tests
-          command: mvn -f unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+          command: mvn -f unittest/pom.xml verify -P selenium -Dit.test=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
