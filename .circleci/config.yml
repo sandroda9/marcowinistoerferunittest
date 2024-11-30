@@ -2,20 +2,23 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/project/unittest
+    working_directory: ~/project
     docker:
       - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
-          name: Print Current Directory
+          name: Print Working Directory
           command: pwd
       - run:
-          name: List All Files and Directories
-          command: ls -R
+          name: List All Files in Project Directory
+          command: ls -al /home/circleci/project
+      - run:
+          name: List All Files in Unittest Directory
+          command: ls -al /home/circleci/project/unittest || echo "Directory unittest does not exist"
       - run:
           name: Build Project
-          command: mvn -f ~/project/unittest/pom.xml install -DskipTests
+          command: mvn -f /home/circleci/project/pom.xml install -DskipTests || mvn -f /home/circleci/project/unittest/pom.xml install -DskipTests
 
   unit_test:
     working_directory: ~/project/unittest
