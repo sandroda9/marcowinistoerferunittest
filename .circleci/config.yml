@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/unittest
+    working_directory: home/unittest
     docker:
       - image: cimg/openjdk:17.0  # Ensure Java 17 compatibility
     steps:
@@ -23,7 +23,7 @@ jobs:
           command: mvn -f ~/unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
-    working_directory: ~/unittest
+    working_directory: home/unittest
     docker:
       - image: cimg/openjdk:17.0
       - image: circleci/mysql:8.0
@@ -50,7 +50,7 @@ jobs:
           command: mvn -f ~/unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
 
   selenium_test:
-    working_directory: ~/unittest
+    working_directory: home/unittest
     docker:
       - image: cimg/openjdk:17.0
       - image: selenium/standalone-chrome:latest
