@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/project
+    working_directory: ~/unittest
     docker:
       - image: cimg/openjdk:17.0  # Ensure Java 17 compatibility
     steps:
@@ -13,17 +13,17 @@ jobs:
           command: mvn -B -DskipTests clean package
 
   unit_test:
-    working_directory: ~/project
+    working_directory: ~/unittest
     docker:
       - image: cimg/openjdk:17.0
     steps:
       - checkout
       - run:
           name: Run Unit Tests
-          command: mvn -f ~/project/unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+          command: mvn -f ~/unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
-    working_directory: ~/project
+    working_directory: ~/unittest
     docker:
       - image: cimg/openjdk:17.0
       - image: circleci/mysql:8.0
@@ -47,10 +47,10 @@ jobs:
             fi
       - run:
           name: Run Integration Tests
-          command: mvn -f ~/project/unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
+          command: mvn -f ~/unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
 
   selenium_test:
-    working_directory: ~/project
+    working_directory: ~/unittest
     docker:
       - image: cimg/openjdk:17.0
       - image: selenium/standalone-chrome:latest
@@ -58,7 +58,7 @@ jobs:
       - checkout
       - run:
           name: Run Selenium Functional Tests
-          command: mvn -f ~/project/unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+          command: mvn -f ~/unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
