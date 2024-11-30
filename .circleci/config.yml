@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/unittest
+    working_directory: ~/marcowinistoerferunittest
     docker:
       - image: cimg/openjdk:17.0
     steps:
@@ -12,7 +12,7 @@ jobs:
           command: mvn -f unittest/pom.xml clean package -DskipTests
 
   unit_test:
-    working_directory: ~/unittest
+    working_directory: ~/marcowinistoerferunittest
     docker:
       - image: cimg/openjdk:17.0
     steps:
@@ -22,7 +22,7 @@ jobs:
           command: mvn -f unittest/pom.xml -Dit.test=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
-    working_directory: ~/unittest
+    working_directory: ~/marcowinistoerferunittest
     docker:
       - image: cimg/openjdk:17.0
       - image: circleci/mysql:8.0
@@ -49,7 +49,7 @@ jobs:
           command: mvn -f unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest -DexcludedTests=com.mayab.quality.integration.UserDAOTest
 
   selenium_test:
-    working_directory: ~/unittest
+    working_directory: ~/marcowinistoerferunittest
     docker:
       - image: cimg/openjdk:17.0
       - image: selenium/standalone-chrome:latest
