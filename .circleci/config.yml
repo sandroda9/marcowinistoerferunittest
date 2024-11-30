@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: Clean and Build
-          command: mvn -f unittest/pom.xml clean package
+          command: mvn -f unittest/pom.xml clean package -DskipTests
 
   unit_test:
     working_directory: ~/unittest
