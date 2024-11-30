@@ -7,20 +7,10 @@ jobs:
       - image: cimg/openjdk:17.0  # Ensure Java 17 compatibility
     steps:
       - checkout
+      # Use mvn clean and package as the standard maven build phase
       - run:
-          name: Print Current Directory
-          command: pwd
-      - run:
-          name: List All Files in Project Directory
-          command: ls -al ~/project
-      - run:
-          name: Build Project
-          command: |
-            if [ -f ~/project/unittest/pom.xml ]; then
-              mvn -f ~/project/unittest/pom.xml install -DskipTests
-            else
-              mvn -f ~/project/pom.xml install -DskipTests
-            fi
+          name: Build
+          command: mvn -B -DskipTests clean package
 
   unit_test:
     working_directory: ~/project
