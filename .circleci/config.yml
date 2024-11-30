@@ -21,7 +21,7 @@ jobs:
       - checkout
       - run:
           name: Run Unit Tests
-          command: mvn -f unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+          command: mvn -f unittest/pom.xml -Dtest=com.mayab.quality.unittest.service.UserServiceTest* test
 
   integration_test:
     working_directory: ~/unittest
@@ -48,7 +48,7 @@ jobs:
             fi
       - run:
           name: Run Integration Tests
-          command: mvn -f unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest -DexcludedTests=com.mayab.quality.integration.UserDAOTest
+          command: mvn -f unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest* test
 
   selenium_test:
     working_directory: ~/unittest
@@ -59,7 +59,7 @@ jobs:
       - checkout
       - run:
           name: Run Selenium Functional Tests
-          command: mvn -f unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+          command: mvn -f unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest* test
 
 workflows:
   build_and_test:
