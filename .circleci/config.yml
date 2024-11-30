@@ -12,13 +12,15 @@ jobs:
           command: pwd
       - run:
           name: List All Files in Project Directory
-          command: ls -al /home/circleci/project
-      - run:
-          name: List All Files in Unittest Directory
-          command: ls -al /home/circleci/project/unittest || echo "Directory unittest does not exist"
+          command: ls -al ~/project
       - run:
           name: Build Project
-          command: mvn -f /home/circleci/project/unittest/pom.xml install -DskipTests || mvn -f /home/circleci/project/pom.xml install -DskipTests
+          command: |
+            if [ -f ~/project/unittest/pom.xml ]; then
+              mvn -f ~/project/unittest/pom.xml install -DskipTests
+            else
+              mvn -f ~/project/pom.xml install -DskipTests
+            fi
 
   unit_test:
     working_directory: ~/project
@@ -28,7 +30,7 @@ jobs:
       - checkout
       - run:
           name: Run Unit Tests
-          command: mvn -f /home/circleci/project/unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+          command: mvn -f ~/project/unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
     working_directory: ~/project
@@ -45,14 +47,17 @@ jobs:
       - run:
           name: Wait for MySQL to Start
           command: |
-            for i in `seq 1 30`; do
+            for i in $(seq 1 30); do
               nc -z localhost 3306 && echo "MySQL is up!" && break
               echo "Waiting for MySQL..."
               sleep 1
             done
+            if ! nc -z localhost 3306; then
+              echo "MySQL failed to start." && exit 1
+            fi
       - run:
           name: Run Integration Tests
-          command: mvn -f /home/circleci/project/unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
+          command: mvn -f ~/project/unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
 
   selenium_test:
     working_directory: ~/project
@@ -63,7 +68,7 @@ jobs:
       - checkout
       - run:
           name: Run Selenium Functional Tests
-          command: mvn -f /home/circleci/project/unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+          command: mvn -f ~/project/unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
