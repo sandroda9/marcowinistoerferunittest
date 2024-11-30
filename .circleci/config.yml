@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: Clean and Build
-          command: mvn -f unittest/pom.xml clean package -DskipTests
+          command: mvn -f marcowinistoerferunittest/pom.xml clean package -DskipTests
 
   unit_test:
     working_directory: ~/marcowinistoerferunittest
@@ -19,7 +19,7 @@ jobs:
       - checkout
       - run:
           name: Unit Tests
-          command: mvn -f unittest/pom.xml -Dit.test=com.mayab.quality.unittest.service.UserServiceTest
+          command: mvn -f marcowinistoerferunittest/pom.xml -Dit.test=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
     working_directory: ~/marcowinistoerferunittest
@@ -46,7 +46,7 @@ jobs:
             fi
       - run:
           name: Run Integration Tests
-          command: mvn -f unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest -DexcludedTests=com.mayab.quality.integration.UserDAOTest
+          command: mvn -f marcowinistoerferunittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest -DexcludedTests=com.mayab.quality.integration.UserDAOTest
 
   selenium_test:
     working_directory: ~/marcowinistoerferunittest
@@ -57,7 +57,7 @@ jobs:
       - checkout
       - run:
           name: Run Selenium Functional Tests
-          command: mvn -f unittest/pom.xml verify -P selenium -Dit.test=com.mayab.quality.functional.CRUDSeleniumTest
+          command: mvn -f marcowinistoerferunittest/pom.xml verify -P selenium -Dit.test=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
