@@ -2,38 +2,38 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/project/unittest
+    working_directory: ~/project
     docker:
-      - image: cimg/openjdk:17.0  # Updated to Java 17
+      - image: cimg/openjdk:17.0  # Ensure Java 17 compatibility
     steps:
       - checkout
       - run:
           name: Print Current Directory
           command: pwd
       - run:
-          name: List All Files in Directory
-          command: ls -al
+          name: List All Files in Project Directory
+          command: ls -al /home/circleci/project
+      - run:
+          name: List All Files in Unittest Directory
+          command: ls -al /home/circleci/project/unittest || echo "Directory unittest does not exist"
       - run:
           name: Build Project
-          command: mvn install -DskipTests  # Builds without running tests
+          command: mvn -f /home/circleci/project/unittest/pom.xml install -DskipTests || mvn -f /home/circleci/project/pom.xml install -DskipTests
 
   unit_test:
-    working_directory: ~/project/unittest
+    working_directory: ~/project
     docker:
-      - image: cimg/openjdk:17.0  # Updated to Java 17
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
       - run:
-          name: Print Current Directory
-          command: pwd
-      - run:
           name: Run Unit Tests
-          command: mvn test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+          command: mvn -f /home/circleci/project/unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
-    working_directory: ~/project/unittest
+    working_directory: ~/project
     docker:
-      - image: cimg/openjdk:17.0  # Updated to Java 17
+      - image: cimg/openjdk:17.0
       - image: circleci/mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -42,12 +42,6 @@ jobs:
       MYSQL_PASSWORD: root
     steps:
       - checkout
-      - run:
-          name: Print Current Directory
-          command: pwd
-      - run:
-          name: List All Files in Directory
-          command: ls -al
       - run:
           name: Wait for MySQL to Start
           command: |
@@ -58,24 +52,18 @@ jobs:
             done
       - run:
           name: Run Integration Tests
-          command: mvn failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
+          command: mvn -f /home/circleci/project/unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
 
   selenium_test:
-    working_directory: ~/project/unittest
+    working_directory: ~/project
     docker:
-      - image: cimg/openjdk:17.0  # Updated to Java 17
+      - image: cimg/openjdk:17.0
       - image: selenium/standalone-chrome:latest
     steps:
       - checkout
       - run:
-          name: Print Current Directory
-          command: pwd
-      - run:
-          name: List All Files in Directory
-          command: ls -al
-      - run:
           name: Run Selenium Functional Tests
-          command: mvn verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+          command: mvn -f /home/circleci/project/unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
