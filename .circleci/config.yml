@@ -4,14 +4,12 @@ jobs:
   build:
     working_directory: ~/unittest
     docker:
-      - image: cimg/openjdk:17.0  # Ensure Java 17 compatibility
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
-      # Use mvn clean and package as the standard maven build phase
       - run:
-          name: Build
+          name: Clean and Build
           command: mvn -f unittest/pom.xml clean package
-
 
   unit_test:
     working_directory: ~/unittest
@@ -20,8 +18,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run Unit Tests
-          command: mvn -f unittest/pom.xml -Dtest=UserServiceTest* test
+          name: Unit Tests
+          command: mvn -f unittest/pom.xml -Dit.test=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
     working_directory: ~/unittest
@@ -48,7 +46,7 @@ jobs:
             fi
       - run:
           name: Run Integration Tests
-          command: mvn -f unittest/pom.xml failsafe:integration-test -Dtest=UserServiceTest* test
+          command: mvn -f unittest/pom.xml failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest -DexcludedTests=com.mayab.quality.integration.UserDAOTest
 
   selenium_test:
     working_directory: ~/unittest
@@ -59,7 +57,7 @@ jobs:
       - checkout
       - run:
           name: Run Selenium Functional Tests
-          command: mvn -f unittest/pom.xml verify -P selenium -Dtest=CRUDSeleniumTest* test
+          command: mvn -f unittest/pom.xml verify -P selenium -Dit.test=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
