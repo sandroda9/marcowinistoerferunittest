@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: Clean and Build
-          command: mvn marcowinistoerferunittest/unittest/src/pom.xml clean package -DskipTests
+          command: mvn clean package -DskipTests
 
   unit_test:
     working_directory: ~/marcowinistoerferunittest
