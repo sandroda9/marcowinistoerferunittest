@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/unittest
+    working_directory: ~/project/unittest
     docker:
       - image: cimg/openjdk:11.0
     steps:
@@ -28,7 +28,7 @@ jobs:
           command: mvn test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
-    working_directory: ~/unittest
+    working_directory: ~/project/unittest
     docker:
       - image: cimg/openjdk:11.0
       - image: circleci/mysql:8.0
@@ -52,7 +52,7 @@ jobs:
           command: mvn failsafe:integration-test -Dit.test=com.mayab.quality.integration.UserServiceTest
 
   selenium_test:
-    working_directory: ~/unittest
+    working_directory: ~/project/unittest
     docker:
       - image: openjdk:17-slim
       - image: selenium/standalone-chrome:latest
