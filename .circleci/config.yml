@@ -49,12 +49,12 @@ jobs:
   selenium_test:
     docker:
       - image: cimg/openjdk:17.0
-      - image: selenium/standalone-chrome:latest
+      - image: selenium/standalone-chrome:4.26.0
     steps:
       - checkout
       - run:
           name: Run Selenium Functional Tests
-          command: mvn -f unittest/pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+          command: mvn -f unittest/pom.xml -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
