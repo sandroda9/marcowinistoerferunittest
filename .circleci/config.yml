@@ -1,25 +1,21 @@
 version: 2.1
 
-# Importing the browser-tools orb
 orbs:
   browser-tools: circleci/browser-tools@1.4.9
 
 jobs:
   build-and-test:
     docker:
-      - image: cimg/openjdk:17.0
+      - image: cimg/openjdk:17.0-maven  # Preconfigured Maven image
     steps:
       - checkout
-      - run:
-          name: Install Maven
-          command: sudo apt-get update && sudo apt-get install -y maven
       - run:
           name: Clean and Build
           command: mvn -f unittest/pom.xml clean package -DskipTests
 
   unit_test:
     docker:
-      - image: cimg/openjdk:17.0
+      - image: cimg/openjdk:17.0-maven
     steps:
       - checkout
       - run:
@@ -28,7 +24,7 @@ jobs:
 
   integration_test:
     docker:
-      - image: cimg/openjdk:17.0
+      - image: cimg/openjdk:17.0-maven
       - image: circleci/mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -57,6 +53,7 @@ jobs:
       - image: cimg/node:20.4.0-browsers
     steps:
       - checkout
+      - browser-tools/install-browser-tools
       - run:
           name: Run Selenium Functional Tests
           command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
