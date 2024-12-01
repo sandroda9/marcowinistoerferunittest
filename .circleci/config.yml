@@ -2,22 +2,30 @@ version: 2.1
 
 jobs:
   build-and-test:
+    working_directory: ~/marcowinistoerferunittest
     docker:
       - image: cimg/openjdk:17.0
     steps:
       - checkout
       - run:
-          name: Build
+          name: Clean and Build
           command: mvn -B -DskipTests clean package
 
   unit_test:
+    working_directory: ~/marcowinistoerferunittest
+    docker:
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
       - run:
-          name: Unit Tests
-          command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+          name: Run Unit Tests
+          command: mvn -f pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
+    working_directory: ~/marcowinistoerferunittest
+    docker:
+      - image: cimg/openjdk:17.0
+      - image: circleci/mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: calidad2024
@@ -38,24 +46,26 @@ jobs:
             fi
       - run:
           name: Run Integration Tests
-          command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest
+          command: mvn -f pom.xml failsafe:integration-test -Dtest=com.mayab.quality.integration.UserServiceTest
 
   selenium_test:
+    working_directory: ~/marcowinistoerferunittest
     docker:
+      - image: cimg/openjdk:17.0
       - image: selenium/standalone-chrome:latest
     steps:
       - checkout
       - run:
           name: Run Selenium Functional Tests
-          command: mvn verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+          command: mvn -f pom.xml verify -P selenium -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
 
 workflows:
   build_and_test:
     jobs:
-      - build
+      - build-and-test
       - unit_test:
           requires:
-            - build
+            - build-and-test
       - integration_test:
           requires:
             - unit_test
