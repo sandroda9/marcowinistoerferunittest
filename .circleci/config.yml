@@ -54,6 +54,9 @@ jobs:
       - image: cimg/node:20.4.0-browsers
     steps:
       - checkout
+      - run:
+          name: Install Maven
+          command: sudo apt-get update && sudo apt-get install -y maven
       - browser-tools/install-browser-tools
       - run:
           name: Run Selenium Functional Tests
