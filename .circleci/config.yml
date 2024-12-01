@@ -8,7 +8,8 @@ jobs:
       - checkout
       - run:
           name: Clean and Build
-          command: mvn clean package test
+          command: mvn -f unittest/pom.xml clean package
+
 
   unit_test:
     docker:
