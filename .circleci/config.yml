@@ -1,5 +1,6 @@
 version: 2.1
 
+# Importing the browser-tools orb
 orbs:
   browser-tools: circleci/browser-tools@1.4.9
 
@@ -50,11 +51,10 @@ jobs:
 
   selenium_test:
     docker:
-      - image: cimg/openjdk:17.0
+      - image: cimg/node:20.4.0-browsers
     steps:
       - checkout
-      - browser-tools/install:
-          browsers: chrome
+      - browser-tools/install-browser-tools
       - run:
           name: Run Selenium Functional Tests
           command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
