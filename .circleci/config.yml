@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: Clean and Build
-          command: mvn -f pom.xml -B -DskipTests clean package
+          command: mvn clean package test
 
   unit_test:
     docker:
