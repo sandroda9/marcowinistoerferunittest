@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  browser-tools: circleci/browser-tools@1.4.9
+
 jobs:
   build-and-test:
     docker:
@@ -51,7 +54,10 @@ jobs:
       - image: cimg/openjdk:17.0
       - image: selenium/standalone-chrome:4.26.0
     steps:
+      steps:
       - checkout
+      - browser-tools/install:
+          browsers: chrome
       - run:
           name: Run Selenium Functional Tests
           command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
