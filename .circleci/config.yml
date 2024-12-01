@@ -6,7 +6,7 @@ orbs:
 jobs:
   build-and-test:
     docker:
-      - image: maven:3.8.5-openjdk-17
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
       - run:
@@ -15,7 +15,7 @@ jobs:
 
   unit_test:
     docker:
-      - image: maven:3.8.5-openjdk-17
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
       - run:
@@ -50,14 +50,15 @@ jobs:
 
 
   selenium_test:
-    docker:
-      - image: cimg/node:20.4.0-browsers
-    steps:
-      - checkout
-      - browser-tools/install-browser-tools
-      - run:
-          name: Run Selenium Functional Tests
-          command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+  docker:
+    - image: cimg/openjdk:17.0-browsers
+  steps:
+    - checkout
+    - browser-tools/install-browser-tools
+    - run:
+        name: Run Selenium Functional Tests
+        command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+
 
 workflows:
   build_and_test:
