@@ -2,6 +2,7 @@ version: 2.1
 
 jobs:
   build-and-test:
+  working_directory: /home/unittest
     docker:
       - image: cimg/openjdk:17.0
     steps:
