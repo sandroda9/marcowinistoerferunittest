@@ -6,7 +6,7 @@ orbs:
 jobs:
   build-and-test:
     docker:
-      - image: cimg/openjdk:17.0-maven  # Preconfigured Maven image
+      - image: maven:3.8.5-openjdk-17
     steps:
       - checkout
       - run:
@@ -15,7 +15,7 @@ jobs:
 
   unit_test:
     docker:
-      - image: cimg/openjdk:17.0-maven
+      - image: maven:3.8.5-openjdk-17
     steps:
       - checkout
       - run:
@@ -24,7 +24,7 @@ jobs:
 
   integration_test:
     docker:
-      - image: cimg/openjdk:17.0-maven
+      - image: maven:3.8.5-openjdk-17
       - image: circleci/mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
