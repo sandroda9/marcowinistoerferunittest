@@ -18,7 +18,7 @@ jobs:
       - checkout
       - run:
           name: Run Unit Tests
-          command: mvn -f pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+          command: mvn -f unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
 
   integration_test:
     docker:
