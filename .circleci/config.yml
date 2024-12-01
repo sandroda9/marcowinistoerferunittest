@@ -13,7 +13,6 @@ jobs:
           name: Clean and Build
           command: mvn -f unittest/pom.xml clean package -DskipTests
 
-
   unit_test:
     docker:
       - image: cimg/openjdk:17.0
@@ -52,9 +51,7 @@ jobs:
   selenium_test:
     docker:
       - image: cimg/openjdk:17.0
-      - image: selenium/standalone-chrome:4.26.0
     steps:
-      steps:
       - checkout
       - browser-tools/install:
           browsers: chrome
