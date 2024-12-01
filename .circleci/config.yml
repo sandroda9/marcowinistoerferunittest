@@ -44,7 +44,7 @@ jobs:
             fi
       - run:
           name: Run Integration Tests
-          command: mvn -f pom.xml failsafe:integration-test -Dtest=com.mayab.quality.integration.UserServiceTest
+          command: mvn -f unittest/pom.xml failsafe:integration-test -Dtest=com.mayab.quality.integration.UserServiceTest
 
   selenium_test:
     docker:
