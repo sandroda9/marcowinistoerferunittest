@@ -95,18 +95,21 @@ jobs:
           command: |
             git config --global user.email "marco.winistorfer@anahuac.mx"
             git config --global user.name "marcowini"
-            git checkout -b gh-pages
-            mkdir -p screenshots  # Ensure screenshots folder exists
-            cp -r screenshots/* .
-            echo "<html><body><h1>Test Results</h1><ul>" > index.html
-            for file in screenshots/*; do
-              echo "<li><a href='$file'>$(basename $file)</a></li>" >> index.html
-            done
-            echo "</ul></body></html>" >> index.html
-            git add .
-            git commit -m "Update test results with screenshots"
-            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
-
+            git checkout -b gh-pages || git checkout gh-pages
+            mkdir -p screenshots  # Ensure screenshots directory exists
+            if [ -d "screenshots" ] && [ "$(ls -A screenshots)" ]; then
+              cp -r screenshots/* .
+              echo "<html><body><h1>Test Results</h1><ul>" > index.html
+              for file in screenshots/*; do
+                echo "<li><a href='$file'>$(basename $file)</a></li>" >> index.html
+              done
+              echo "</ul></body></html>" >> index.html
+              git add .
+              git commit -m "Update test results with screenshots"
+              git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
+            else
+              echo "No screenshots to publish. Skipping this step."
+            fi
 
 workflows:
   build_and_test_and_deploy:
