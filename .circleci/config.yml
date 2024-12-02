@@ -107,12 +107,27 @@ workflows:
       - unit_test:
           requires:
             - build-and-test
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+            
       - integration_test:
           requires:
             - unit_test
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+                
       - selenium_test:
           requires:
             - integration_test
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+            
       - deploy:
           requires:
             - selenium_test
