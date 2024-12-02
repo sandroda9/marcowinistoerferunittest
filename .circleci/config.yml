@@ -71,7 +71,11 @@ jobs:
           name: Prepare Screenshots for Publishing
           command: |
             mkdir -p screenshots
-            cp unittest/src/screenshots/
+            if ls unittest/src/screenshots/* 1> /dev/null 2>&1; then
+              cp unittest/src/screenshots/* screenshots/
+            else
+              echo "No screenshots found to copy."
+            fi
       - store_artifacts:
           path: screenshots
           destination: functional-test-screenshots
