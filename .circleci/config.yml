@@ -58,7 +58,7 @@ jobs:
           name: Capture Screenshots
           command: |
             mkdir -p screenshots
-            cp unittest/src/screenshots/*.png screenshots/
+            cp unittest/src/screenshots/
       - run:
           name: Commit and Push Screenshots
           command: |
