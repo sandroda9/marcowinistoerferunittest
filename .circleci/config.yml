@@ -21,6 +21,11 @@ jobs:
       - run:
           name: Run Unit Tests
           command: mvn -f unittest/pom.xml test -Dtest=com.mayab.quality.unittest.service.UserServiceTest
+      - store_test_results:
+          path: unittest/target/surefire-reports
+      - store_artifacts:
+          path: unittest/target/surefire-reports
+          destination: unit-test-results
 
   integration_test:
     docker:
@@ -47,6 +52,11 @@ jobs:
       - run:
           name: Run Integration Tests
           command: mvn -f unittest/pom.xml failsafe:integration-test -Dtest=com.mayab.quality.integration.UserServiceTest
+      - store_test_results:
+          path: unittest/target/failsafe-reports
+      - store_artifacts:
+          path: unittest/target/failsafe-reports
+          destination: integration-test-results
 
   selenium_test:
     docker: 
@@ -55,22 +65,13 @@ jobs:
       - checkout
       - browser-tools/install-browser-tools
       - run:
-          name: Capture Screenshots
-          command: |
-            mkdir -p screenshots
-            cp unittest/src/screenshots/*.png screenshots/
-      - run:
-          name: Commit and Push Screenshots
-          command: |
-            git config credential.helper 'cache --timeout=120'
-            git config user.email "marco.winistorfer@anahuac.mx"
-            git config user.name "marcowini"
-            git add screenshots/
-            git commit -m "Add test screenshots"
-            git push https://marcowini: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@github.com/marcowini/marcowinistoerferunittest.git
-      - run:
           name: Run Selenium Functional Tests
           command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+      - store_test_results:
+          path: unittest/target/surefire-reports
+      - store_artifacts:
+          path: unittest/target/surefire-reports
+          destination: functional-test-results
 
 workflows:
   build_and_test:
