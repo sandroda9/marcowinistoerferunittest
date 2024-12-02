@@ -76,20 +76,6 @@ jobs:
             else
               echo "No screenshots found to copy."
             fi
-      - store_artifacts:
-          path: screenshots
-          destination: functional-test-screenshots
-      - store_test_results:
-          path: unittest/target/surefire-reports
-
-  deploy:
-    docker:
-      - image: cimg/openjdk:17.0
-    steps:
-      - checkout
-      - run:
-          name: Deploy Application
-          command: echo "Deploying application to production..."
       - run:
           name: Publish Results to GitHub Pages
           command: |
@@ -110,7 +96,21 @@ jobs:
             else
               echo "No screenshots to publish. Skipping this step."
             fi
+      - store_artifacts:
+          path: screenshots
+          destination: functional-test-screenshots
+      - store_test_results:
+          path: unittest/target/surefire-reports
 
+  deploy:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - checkout
+      - run:
+          name: Deploy Application
+          command: echo "Deploying application to production"
+      
 workflows:
   build_and_test_and_deploy:
     jobs:
