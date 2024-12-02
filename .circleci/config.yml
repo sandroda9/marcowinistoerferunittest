@@ -73,6 +73,17 @@ jobs:
           path: unittest/target/surefire-reports
           destination: functional-test-results
 
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: Deployment
+          command: echo "Deploying application to production environment"
+      - run:
+          name: Deployment Complete
+          command: echo "Application deployed successfully"
+
 workflows:
   build_and_test:
     jobs:
@@ -86,3 +97,9 @@ workflows:
       - selenium_test:
           requires:
             - integration_test
+      - deploy:
+          requires:
+            - selenium_test
+          filters:
+            branches:
+              only: main
