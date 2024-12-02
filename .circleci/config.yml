@@ -104,10 +104,10 @@ workflows:
   build_and_test_and_deploy:
     jobs:
       - build-and-test
-          filters:
-            branches:
-              ignore:
-                - gh-pages
+        filters:
+          branches:
+            ignore:
+              - gh-pages
       - unit_test:
           requires:
             - build-and-test
