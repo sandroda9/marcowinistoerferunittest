@@ -14,20 +14,30 @@ public class UserService {
 	}
 	
 	public User createUser(String name, String email, String password) {
-	    User user = null;
-	    if (password.length() >= 8 && password.length() <= 16) {
-	        user = dao.findUserByEmail(email);
-	        
-	        if (user == null) {
-	            user = new User(name, email, password);
-	            int id = dao.save(user);
-	            if (id > 0) user.setId(id);
-	        } else {
-	            return null;
-	        }
+	    // Check password length
+	    if (password.length() < 8 || password.length() > 16) {
+	        return null; // Invalid password length
 	    }
-	    return user;
+
+	    // Check for existing user with the same email
+	    User existingUser = dao.findUserByEmail(email);
+	    if (existingUser != null) {
+	        return null; // Email already exists, return null
+	    }
+
+	    // Create a new user
+	    User newUser = new User(name, email, password);
+	    int id = dao.save(newUser);
+
+	    // Check if the user was saved successfully
+	    if (id > 0) {
+	        newUser.setId(id);
+	        return newUser; // Return the created user
+	    }
+
+	    return null; // Return null if save operation failed
 	}
+
 
 	
 	public List<User> findAllUsers(){

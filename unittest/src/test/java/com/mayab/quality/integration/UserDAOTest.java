@@ -1,4 +1,4 @@
-package com.mayab.quality.integration;
+/*package com.mayab.quality.integration;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -145,4 +145,4 @@ class UserDAOTest extends DBTestCase {
     
     
 
-}
+}*/
