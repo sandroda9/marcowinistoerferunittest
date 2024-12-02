@@ -2,17 +2,22 @@ package com.mayab.quality.functional;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.*;
 import org.junit.runners.*;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
+
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
 public class CRUDSeleniumTest {
-    private WebDriver driver;
+    private static WebDriver driver;
     private String baseUrl;
     private StringBuffer verificationErrors = new StringBuffer();
     JavascriptExecutor js;
@@ -25,6 +30,15 @@ public class CRUDSeleniumTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
         js = (JavascriptExecutor) driver;
     }
+    
+  //Function to Take Screenshot
+  	public static void TakeScreenshot(String fileName)throws IOException {
+  	   // Creating an instance of File
+  	   File file = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+  	
+  	   // Copy the screenshot to the desired location
+  	   FileUtils.copyFile(file, new File("src/screenshots/" + fileName + ".jpeg"));
+  	}
 
     @Test
     public void test1_CreateNewRecord() throws Exception {
@@ -46,6 +60,17 @@ public class CRUDSeleniumTest {
         String actualResult = driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[4]/div/div")).getText();
 
         assertTrue(actualResult.contains("Nice one"));
+        
+        try {
+    		TakeScreenshot("createNewRecord_screenshots");
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		System.out.println("screenshot");
+    		
+    		e.printStackTrace();
+    		
+    		
+    	}
     }
     
     @Test
@@ -68,6 +93,17 @@ public class CRUDSeleniumTest {
         String actualResult = driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[5]/div/div")).getText();
 
         assertTrue(actualResult.contains("Woah"));
+        
+        try {
+    		TakeScreenshot("duplicateEmail_screenshots");
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		System.out.println("screenshot");
+    		
+    		e.printStackTrace();
+    		
+    		
+    	}
     }
     
     @Test
@@ -92,6 +128,17 @@ public class CRUDSeleniumTest {
 
         String actualResult = driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[4]/div/div")).getText();
         assertTrue(actualResult.contains("Nice one"));
+        
+        try {
+    		TakeScreenshot("modifyAge_screenshots");
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		System.out.println("screenshot");
+    		
+    		e.printStackTrace();
+    		
+    		
+    	}
     }
         
     @Test
@@ -104,6 +151,17 @@ public class CRUDSeleniumTest {
         assertTrue(pageText.contains("marco.wini@example.com"));
 
         System.out.println("The text 'marco.wini@example.com' was found on the page.");
+        
+        try {
+    		TakeScreenshot("findSpecificUser_screenshots");
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		System.out.println("screenshot");
+    		
+    		e.printStackTrace();
+    		
+    		
+    	}
     }
     
     @Test
@@ -127,6 +185,17 @@ public class CRUDSeleniumTest {
             }
 
         System.out.println("All records in the table were successfully verified.");
+        
+        try {
+    		TakeScreenshot("searchAllRecords_screenshots");
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		System.out.println("screenshot");
+    		
+    		e.printStackTrace();
+    		
+    		
+    	}
     }
 
     @Test
@@ -143,6 +212,17 @@ public class CRUDSeleniumTest {
 	    String pageText = driver.findElement(By.tagName("body")).getText();
 	
 	    assertFalse(pageText.contains("marco.wini@example.com"));
+	    
+	    try {
+    		TakeScreenshot("deleteRecord_screenshots");
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		System.out.println("screenshot");
+    		
+    		e.printStackTrace();
+    		
+    		
+    	}
 	
 	}
     
