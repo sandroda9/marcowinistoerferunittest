@@ -68,36 +68,24 @@ jobs:
           name: Run Selenium Functional Tests
           command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
       - run:
-          name: Prepare Screenshots for Publishing
-          command: |
-            mkdir -p screenshots
-            if ls unittest/src/screenshots/* 1> /dev/null 2>&1; then
-              cp unittest/src/screenshots/* screenshots/
-            else
-              echo "No screenshots found to copy."
-            fi
-      - run:
-          name: Publish Results to GitHub Pages
+          name: Push Screenshots to gh-pages
           command: |
             git config --global user.email "marco.winistorfer@anahuac.mx"
             git config --global user.name "marcowini"
-            git checkout -b gh-pages || git checkout gh-pages
-            mkdir -p screenshots  # Ensure screenshots directory exists
-            if [ -d "screenshots" ] && [ "$(ls -A screenshots)" ]; then
-              cp -r screenshots/* .
-              echo "<html><body><h1>Test Results</h1><ul>" > index.html
-              for file in screenshots/*; do
-                echo "<li><a href='$file'>$(basename $file)</a></li>" >> index.html
-              done
-              echo "</ul></body></html>" >> index.html
-              git add .
-              git commit -m "Update test results with screenshots"
-              git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
-            else
-              echo "No screenshots to publish. Skipping this step."
-            fi
+            git fetch origin gh-pages || git checkout --orphan gh-pages
+            git checkout gh-pages
+            mkdir -p screenshots  # Ensure screenshots folder exists
+            cp unittest/src/screenshots/* screenshots/
+            echo "<html><body><h1>Test Results</h1><ul>" > index.html
+            for file in screenshots/*; do
+              echo "<li><a href='$file'>$(basename $file)</a></li>" >> index.html
+            done
+            echo "</ul></body></html>" >> index.html
+            git add .
+            git commit -m "Update test results with screenshots"
+            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
       - store_artifacts:
-          path: screenshots
+          path: unittest/src/screenshots/
           destination: functional-test-screenshots
       - store_test_results:
           path: unittest/target/surefire-reports
@@ -110,7 +98,7 @@ jobs:
       - run:
           name: Deploy Application
           command: echo "Deploying application to production"
-      
+
 workflows:
   build_and_test_and_deploy:
     jobs:
