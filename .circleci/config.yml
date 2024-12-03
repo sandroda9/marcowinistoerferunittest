@@ -72,18 +72,23 @@ jobs:
           command: |
             git config --global user.email "marco.winistorfer@anahuac.mx"
             git config --global user.name "marcowini"
+            # Fetch and switch to gh-pages branch
             git fetch origin gh-pages || true  
             git checkout gh-pages || git checkout --orphan gh-pages
+            # Copy screenshots
             mkdir -p screenshots  # Ensure screenshots folder exists
             cp unittest/src/screenshots/* screenshots/
+            # Create or update the index.html file
             echo "<html><body><h1>Test Results</h1><ul>" > index.html
             for file in screenshots/*; do
               echo "<li><a href='$file'>$(basename $file)</a></li>" >> index.html
             done
             echo "</ul></body></html>" >> index.html
+            # Commit and push changes
             git add .
-            git commit -m "Update test results with screenshots" || true  
-            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
+            git commit -m "Update test results with screenshots" || echo "No changes to commit"
+            git push -f https://github.com/marcowini/marcowinistoerferunittest.git gh-pages
+
 
       - store_artifacts:
           path: unittest/src/screenshots/
@@ -98,7 +103,7 @@ jobs:
       - checkout
       - run:
           name: Deploy Application
-          command: echo "Deploying application to production"
+          command: echo "Deploy application"
 
 workflows:
   build_and_test_and_deploy:
