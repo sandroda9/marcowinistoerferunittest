@@ -68,22 +68,20 @@ jobs:
           name: Run Selenium Functional Tests
           command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
       - run:
-          name: Push Screenshots to gh-pages
+          name: Configure Git
           command: |
             git config --global user.email "marco.winistorfer@anahuac.mx"
             git config --global user.name "marcowini"
-            git fetch origin gh-pages || git checkout --orphan gh-pages  # Fetch gh-pages or create it
-            git checkout gh-pages
-            mkdir -p screenshots  # Ensure screenshots folder exists
-            cp unittest/src/screenshots/* screenshots/  # Copy screenshots to the gh-pages branch
-            echo "<html><body><h1>Test Results</h1><ul>" > index.html
-            for file in screenshots/*; do
-              echo "<li><a href='$file'>$(basename $file)</a></li>" >> index.html
-            done
-            echo "</ul></body></html>" >> index.html
-            git add screenshots/ index.html  # Only add screenshots folder and index.html
-            git commit -m "Update test results with screenshots" || echo "No changes to commit"
-            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
+      - run:
+          name: Add changes and commit
+          command: |
+            git add screenshots/
+            git commit -m "Update test results with screenshots"
+            
+      - run:
+          name: Push changes to GitHub
+          command: |
+            git push https://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@github.com/marcowini/marcowinistoerferunittest.git HEAD:gh-pages
 
       - store_artifacts:
           path: unittest/src/screenshots/
