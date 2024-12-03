@@ -81,7 +81,7 @@ jobs:
       - run:
           name: Push changes to GitHub
           command: |
-            git push https://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@github.com/marcowini/marcowinistoerferunittest.git HEAD:gh-pages
+            git push https://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@github.com/marcowini/marcowinistoerferunittest.git HEAD:gh-pages
 
       - store_artifacts:
           path: unittest/src/screenshots/
