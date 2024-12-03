@@ -72,36 +72,13 @@ jobs:
           command: |
             git config --global user.email "marco.winistorfer@anahuac.mx"
             git config --global user.name "marcowini"
-      
-            # Check if the gh-pages branch exists remotely
-            if git ls-remote --exit-code --heads origin gh-pages; then
-              git fetch origin gh-pages
-              git checkout gh-pages
-            else
-              git checkout --orphan gh-pages
-            fi
-      
+            git fetch origin gh-pages || git checkout --orphan gh-pages
+            git checkout gh-pages || git checkout --orphan gh-pages
             mkdir -p screenshots  # Ensure screenshots folder exists
-            cp unittest/src/screenshots/* screenshots/ || true  # Avoid errors if no screenshots exist
-      
-            # Create or update the index.html file
-            echo "<html><body><h1>Test Results</h1><ul>" > index.html
-            for file in screenshots/*; do
-              echo "<li><a href='$file'>$(basename $file)</a></li>" >> index.html
-            done
-            echo "</ul></body></html>" >> index.html
-      
-            # Add only screenshots and the index.html file
-            git add screenshots/ index.html
-      
-            # Commit the changes
-            git commit -m "Update test results with screenshots" || true  # Avoid error if no changes
-      
-            # Push changes to gh-pages branch
+            cp unittest/src/screenshots/* screenshots/  # Copy screenshots to the screenshots folder
+            git add screenshots  # Add the screenshots folder to git
+            git commit -m "Update screenshots" || echo "No changes to commit"
             git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
-
-
-
 
       - store_artifacts:
           path: unittest/src/screenshots/
