@@ -87,7 +87,7 @@ jobs:
             # Commit and push changes
             git add .
             git commit -m "Update test results with screenshots" || echo "No changes to commit"
-            git push -f https://github.com/marcowini/marcowinistoerferunittest.git gh-pages
+            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
 
 
       - store_artifacts:
