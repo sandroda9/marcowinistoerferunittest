@@ -81,6 +81,7 @@ jobs:
       - run:
           name: Push changes to GitHub
           command: |
+            pwd
             git push https://github.com/marcowini/marcowinistoerferunittest.git HEAD:gh-pages
 
       - store_artifacts:
