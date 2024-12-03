@@ -76,7 +76,7 @@ jobs:
             git checkout gh-pages || git checkout --orphan gh-pages
             mkdir -p screenshots  # Ensure screenshots folder exists
             cp unittest/src/screenshots/* screenshots/  # Copy screenshots to the screenshots folder
-            git add screenshots  # Add the screenshots folder to git
+            git add screenshots/  # Add the screenshots folder to git
             git commit -m "Update screenshots" || echo "No changes to commit"
             git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
 
