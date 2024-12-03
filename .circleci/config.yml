@@ -74,11 +74,12 @@ jobs:
             git config --global user.name "marcowini"
             git fetch origin gh-pages || git checkout --orphan gh-pages
             git checkout gh-pages || git checkout --orphan gh-pages
-            mkdir -p screenshots  # Ensure screenshots folder exists
-            cp unittest/src/screenshots/* screenshots/  # Copy screenshots to the screenshots folder
-            git add screenshots/  # Add the screenshots folder to git
+            mkdir -p screenshots
+            cp unittest/src/screenshots/* screenshots/
+            git add screenshots/
             git commit -m "Update screenshots" || echo "No changes to commit"
-            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
+            timeout 300 git push -v -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
+
 
       - store_artifacts:
           path: unittest/src/screenshots/
