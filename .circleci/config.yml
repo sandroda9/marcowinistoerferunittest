@@ -83,7 +83,7 @@ jobs:
             echo "</ul></body></html>" >> index.html
             git add .
             git commit -m "Update test results with screenshots" || true  
-            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
+            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
 
       - store_artifacts:
           path: unittest/src/screenshots/
