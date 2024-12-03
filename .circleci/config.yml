@@ -75,7 +75,7 @@ jobs:
       - run:
           name: Add changes and commit
           command: |
-            git add screenshots/
+            git add unittest/src/screenshots/
             git commit -m "Update test results with screenshots"
             
       - run:
