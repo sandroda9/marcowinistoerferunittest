@@ -53,9 +53,9 @@ jobs:
           name: Run Integration Tests
           command: mvn -f unittest/pom.xml failsafe:integration-test -Dtest=com.mayab.quality.integration.UserServiceTest
       - store_test_results:
-          path: unittest/target/failsafe-reports
+          path: integration_test/target/failsafe-reports
       - store_artifacts:
-          path: unittest/target/failsafe-reports
+          path: integration_test/target/failsafe-reports
           destination: integration-test-results
 
   selenium_test:
