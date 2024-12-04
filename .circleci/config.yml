@@ -67,6 +67,19 @@ jobs:
       - run:
           name: Run Selenium Functional Tests
           command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
+      
+
+      - store_artifacts:
+          path: unittest/src/screenshots/
+          destination: functional-test-screenshots
+      - store_test_results:
+          path: unittest/target/surefire-reports
+
+  Publish_Results:
+    docker: 
+      - image: cimg/openjdk:17.0-browsers
+    steps:
+      - checkout
       - run:
           name: Push Screenshots to gh-pages
           command: |
@@ -81,13 +94,7 @@ jobs:
               git commit -m "Update test results with screenshots"
             fi  
             git push https://$GITHUB_TOKEN@github.com/marcowini/marcowinistoerferunittest.git gh-pages
-
-      - store_artifacts:
-          path: unittest/src/screenshots/
-          destination: functional-test-screenshots
-      - store_test_results:
-          path: unittest/target/surefire-reports
-
+      
   deploy:
     docker:
       - image: cimg/openjdk:17.0
@@ -122,6 +129,9 @@ workflows:
       - selenium_test:
           requires:
             - integration_test
+      -Publish_Results:
+          requires:
+            -selenium_test
       - deploy:
           requires:
             - selenium_test
