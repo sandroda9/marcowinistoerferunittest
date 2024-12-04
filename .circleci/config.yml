@@ -67,15 +67,13 @@ jobs:
       - run:
           name: Run Selenium Functional Tests
           command: mvn -f unittest/pom.xml verify -Dtest=com.mayab.quality.functional.CRUDSeleniumTest
-      
-
       - store_artifacts:
           path: unittest/src/screenshots/
           destination: functional-test-screenshots
       - store_test_results:
           path: unittest/target/surefire-reports
 
-  Publish_Results:
+  publish_results:
     docker: 
       - image: cimg/openjdk:17.0-browsers
     steps:
@@ -85,7 +83,7 @@ jobs:
           command: |
             git config --global user.email "marco.winistorfer@anahuac.mx"
             git config --global user.name "marcowini"
-            git fetch origin gh-pages ||  git checkout --orphan gh-pages
+            git fetch origin gh-pages || git checkout --orphan gh-pages
             git checkout gh-pages
             git add .
             if git diff-index --quiet HEAD --; then
@@ -129,9 +127,9 @@ workflows:
       - selenium_test:
           requires:
             - integration_test
-      -Publish_Results:
+      - publish_results:
           requires:
-            -selenium_test
+            - selenium_test
       - deploy:
           requires:
             - selenium_test
@@ -139,4 +137,3 @@ workflows:
             branches:
               only:
                 - main
-
