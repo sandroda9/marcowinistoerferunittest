@@ -118,10 +118,6 @@ workflows:
       - selenium_test:
           requires:
             - integration_test
-          filters:
-            branches:
-              ignore:
-                - gh-pages
       - deploy:
           requires:
             - selenium_test
