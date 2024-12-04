@@ -75,8 +75,12 @@ jobs:
             git fetch origin gh-pages ||  git checkout --orphan gh-pages
             git checkout gh-pages
             git add .
-            git commit -m "Update test results with screenshots" || true  
-            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
+            if git diff-index --quiet HEAD --; then
+              echo "No changes to commit."
+            else
+              git commit -m "Update test results with screenshots"
+            fi  
+            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
 
       - store_artifacts:
           path: unittest/src/screenshots/
