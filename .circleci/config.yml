@@ -80,7 +80,7 @@ jobs:
             else
               git commit -m "Update test results with screenshots"
             fi  
-            git push -f https://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@github.com/marcowini/marcowinistoerferunittest.git gh-pages
+            git push https://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@github.com/marcowini/marcowinistoerferunittest.git
 
       - store_artifacts:
           path: unittest/src/screenshots/
