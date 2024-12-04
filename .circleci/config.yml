@@ -132,7 +132,7 @@ workflows:
             - selenium_test
       - deploy:
           requires:
-            - selenium_test
+            - publish_results
           filters:
             branches:
               only:
