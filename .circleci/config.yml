@@ -59,7 +59,7 @@ jobs:
           destination: integration-test-results
 
   selenium_test:
-    docker: 
+    docker:
       - image: cimg/openjdk:17.0-browsers
     steps:
       - checkout
@@ -74,7 +74,7 @@ jobs:
           path: unittest/target/surefire-reports
 
   publish_results:
-    docker: 
+    docker:
       - image: cimg/openjdk:17.0-browsers
     steps:
       - checkout
@@ -85,14 +85,16 @@ jobs:
             git config --global user.name "marcowini"
             git fetch origin gh-pages || git checkout --orphan gh-pages
             git checkout gh-pages
-            cp -R unittest/src/screenshots/* . # Copy only the screenshots to the branch root
-            git add .
+            mkdir -p screenshots  # Ensure screenshots directory exists
+            cp -R unittest/src/screenshots/* screenshots/  # Copy only the screenshots
+            git add screenshots/
             if git diff --quiet; then
               echo "No changes to commit."
             else
               git commit -m "Update screenshots for GitHub Pages"
               git push https://$GITHUB_TOKEN@github.com/marcowini/marcowinistoerferunittest.git gh-pages
-            fi      
+            fi
+
   deploy:
     docker:
       - image: cimg/openjdk:17.0
@@ -105,8 +107,7 @@ jobs:
 workflows:
   build_and_test_and_deploy:
     jobs:
-      - build-and-test:
-        
+      - build-and-test
       - unit_test:
           requires:
             - build-and-test
@@ -126,4 +127,3 @@ workflows:
             branches:
               only:
                 - main
-
