@@ -100,26 +100,43 @@ jobs:
           name: Deploy Application
           command: echo "Deploy application"
 
-workflows:
+  workflows:
   build_and_test_and_deploy:
-    jobs:
-      - build-and-test
-      - unit_test:
-          requires:
-            - build-and-test
-      - integration_test:
-          requires:
-            - unit_test
-      - selenium_test:
-          requires:
-            - integration_test
-      - publish_results:
-          requires:
-            - selenium_test
-      - deploy:
-          requires:
-            - publish_results
-          filters:
-            branches:
-              only:
-                - main
+  jobs:
+    - build-and-test
+    - unit_test:
+        requires:
+          - build-and-test
+        filters:
+          branches:
+            ignore:
+              - gh-pages  
+    - integration_test:
+        requires:
+          - unit_test
+        filters:
+          branches:
+            ignore:
+              - gh-pages  
+    - selenium_test:
+        requires:
+          - integration_test
+        filters:
+          branches:
+            ignore:
+              - gh-pages  
+    - publish_results:
+        requires:
+          - selenium_test
+        filters:
+          branches:
+            ignore:
+              - gh-pages  
+    - deploy:
+        requires:
+          - publish_results
+        filters:
+          branches:
+            only:
+              - main  
+    
