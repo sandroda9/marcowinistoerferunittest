@@ -105,7 +105,7 @@ jobs:
 workflows:
   build_and_test_and_deploy:
     jobs:
-      - build-and-test
+      - build-and-test:
       - unit_test:
           requires:
             - build-and-test
