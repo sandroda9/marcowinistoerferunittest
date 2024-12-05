@@ -126,11 +126,7 @@ workflows:
                 - gh-pages  
       - publish_results:
           requires:
-            - selenium_test
-          filters:
-            branches:
-              ignore:
-                - gh-pages  
+            - selenium_test 
       - deploy:
           requires:
             - publish_results
