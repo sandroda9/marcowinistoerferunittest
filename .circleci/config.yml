@@ -90,7 +90,6 @@ jobs:
             git commit -m "Update screenshots for GitHub Pages"
             git push https://$GITHUB_TOKEN@github.com/sandroda9/marcowinistoerferunittest.git gh-pages
 
-
   deploy:
     docker:
       - image: cimg/openjdk:17.0
@@ -100,43 +99,42 @@ jobs:
           name: Deploy Application
           command: echo "Deploy application"
 
-  workflows:
+workflows:
   build_and_test_and_deploy:
-  jobs:
-    - build-and-test
-    - unit_test:
-        requires:
-          - build-and-test
-        filters:
-          branches:
-            ignore:
-              - gh-pages  
-    - integration_test:
-        requires:
-          - unit_test
-        filters:
-          branches:
-            ignore:
-              - gh-pages  
-    - selenium_test:
-        requires:
-          - integration_test
-        filters:
-          branches:
-            ignore:
-              - gh-pages  
-    - publish_results:
-        requires:
-          - selenium_test
-        filters:
-          branches:
-            ignore:
-              - gh-pages  
-    - deploy:
-        requires:
-          - publish_results
-        filters:
-          branches:
-            only:
-              - main  
-    
+    jobs:
+      - build-and-test
+      - unit_test:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              ignore:
+                - gh-pages  
+      - integration_test:
+          requires:
+            - unit_test
+          filters:
+            branches:
+              ignore:
+                - gh-pages  
+      - selenium_test:
+          requires:
+            - integration_test
+          filters:
+            branches:
+              ignore:
+                - gh-pages  
+      - publish_results:
+          requires:
+            - selenium_test
+          filters:
+            branches:
+              ignore:
+                - gh-pages  
+      - deploy:
+          requires:
+            - publish_results
+          filters:
+            branches:
+              only:
+                - main
