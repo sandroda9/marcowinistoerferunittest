@@ -110,7 +110,6 @@ workflows:
             branches:
               ignore:
                 - gh-pages
-          when: true  # Ensure jobs are triggered correctly
       - unit_test:
           requires:
             - build-and-test
@@ -138,3 +137,4 @@ workflows:
             branches:
               only:
                 - main
+
