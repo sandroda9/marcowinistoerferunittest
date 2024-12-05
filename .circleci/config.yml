@@ -11,7 +11,7 @@ jobs:
       - checkout
       - run:
           name: Clean and Build
-          command: mvn -f unittest/pom.xml clean package -DskipTests
+          command: mvn -f unittest11/pom.xml clean package -DskipTests
 
   unit_test:
     docker:
