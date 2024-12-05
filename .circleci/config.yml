@@ -81,13 +81,13 @@ jobs:
       - run:
           name: Push Screenshots to GitHub Pages
           command: |
-            git config --global user.email "marco.winistorfer@anahuac.mx"
-            git config --global user.name "marcowini"
+            git config --global user.email "sandro.danner@bluewin.ch"
+            git config --global user.name "sandroda9"
             mkdir -p screenshots  # Ensure screenshots directory exists
             cp -R unittest/src/screenshots/* screenshots/  # Copy only the screenshots
             git add screenshots/
             git commit -m "Update screenshots for GitHub Pages"
-            git push https://$GITHUB_TOKEN@github.com/marcowini/marcowinistoerferunittest.git gh-pages
+            git push https://$GITHUB_TOKEN@github.com/sandroda9/marcowinistoerferunittest.git gh-pages
 
   deploy:
     docker:
