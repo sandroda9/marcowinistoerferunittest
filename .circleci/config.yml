@@ -106,24 +106,12 @@ workflows:
   build_and_test_and_deploy:
     jobs:
       - build-and-test:
-          filters:
-            branches:
-              ignore:
-                - gh-pages
       - unit_test:
           requires:
             - build-and-test
-          filters:
-            branches:
-              ignore:
-                - gh-pages
       - integration_test:
           requires:
             - unit_test
-          filters:
-            branches:
-              ignore:
-                - gh-pages
       - selenium_test:
           requires:
             - integration_test
