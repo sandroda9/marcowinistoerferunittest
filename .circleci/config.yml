@@ -83,11 +83,17 @@ jobs:
           command: |
             git config --global user.email "sandro.danner@bluewin.ch"
             git config --global user.name "sandroda9"
+            git fetch origin gh-pages || git checkout --orphan gh-pages
+            git checkout gh-pages
             mkdir -p screenshots  # Ensure screenshots directory exists
             cp -R unittest/src/screenshots/* screenshots/  # Copy only the screenshots
             git add screenshots/
-            git commit -m "Update screenshots for GitHub Pages"
-            git push https://$GITHUB_TOKEN@github.com/sandroda9/marcowinistoerferunittest.git gh-pages
+            if git diff --quiet; then
+              echo "No changes to commit."
+            else
+              git commit -m "Update screenshots for GitHub Pages"
+              git push https://$GITHUB_TOKEN@github.com/sandroda9/marcowinistoerferunittest.git gh-pages
+            fi
 
   deploy:
     docker:
