@@ -117,7 +117,6 @@ workflows:
             branches:
               ignore:
                 - gh-pages
-          when: true
       - integration_test:
           requires:
             - unit_test
@@ -125,15 +124,12 @@ workflows:
             branches:
               ignore:
                 - gh-pages
-          when: true
       - selenium_test:
           requires:
             - integration_test
-          when: true
       - publish_results:
           requires:
             - selenium_test
-          when: true
       - deploy:
           requires:
             - publish_results
@@ -141,4 +137,3 @@ workflows:
             branches:
               only:
                 - main
-          when: true
