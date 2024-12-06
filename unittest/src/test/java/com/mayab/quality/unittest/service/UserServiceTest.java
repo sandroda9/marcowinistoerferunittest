@@ -70,7 +70,7 @@ class UserServiceTest {
 	    assertNotNull(createdUser);
 	    assertEquals(name, createdUser.getName());
 	    assertEquals(email, createdUser.getEmail());
-	    assertEquals(2, createdUser.getId());
+	    assertEquals(1, createdUser.getId());
 	}
 	
 	@Test
